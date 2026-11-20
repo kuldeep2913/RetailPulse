@@ -38,54 +38,11 @@ def load_data():
 df = load_data()
 
 # =====================================================
-# SIDEBAR
+# USE THE COMPLETE DATASET ON THE OVERVIEW PAGE
 # =====================================================
 
-with st.sidebar:
-
-    st.subheader("Dashboard Filters")
-
-    # Country Filter
-
-    countries = sorted(df["Country"].unique())
-
-    selected_country = st.multiselect(
-        " Select Country",
-        countries,
-        default=countries
-    )
-
-    st.markdown("---")
-
-    # Date Filter
-
-    min_date = df["InvoiceDate"].min().date()
-    max_date = df["InvoiceDate"].max().date()
-
-    date_range = st.date_input(
-        " Select Date Range",
-        value=(min_date, max_date),
-        min_value=min_date,
-        max_value=max_date
-    )
-
-
-
-# =====================================================
-# APPLY FILTERS
-# =====================================================
-
-df = df[df["Country"].isin(selected_country)]
-
-if len(date_range) == 2:
-
-    start_date, end_date = date_range
-
-    df = df[
-        (df["InvoiceDate"].dt.date >= start_date)
-        &
-        (df["InvoiceDate"].dt.date <= end_date)
-    ]
+# No country or date filters are applied on this page.
+# Detailed filtering remains available in the relevant analytics modules.
 
 # =====================================================
 # HERO SECTION
@@ -774,7 +731,8 @@ with team2:
     <div class="team-card">
         <div class="team-role">Team Member</div>
         <h3>Prashant</h3>
-        <p>RetailPulse Project Team</p>
+        <p>B.Tech Computer Science Engineering (AI)</p>
+        <p>Shivalik College of Engineering</p>
     </div>
     """, unsafe_allow_html=True)
 
