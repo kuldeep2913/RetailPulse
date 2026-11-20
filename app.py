@@ -4,7 +4,7 @@ st.set_page_config(
     page_title="RetailPulse | Retail Intelligence",
     page_icon="assets/favicon.png",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 def load_global_styles():
@@ -15,19 +15,6 @@ def load_global_styles():
         pass
 
 load_global_styles()
-
-st.markdown(
-    """
-    <div class="site-brand">
-        <div class="site-brand-mark">RP</div>
-        <div>
-            <div class="site-brand-name">RetailPulse</div>
-            <div class="site-brand-tagline">Retail intelligence, made actionable</div>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
 pages = [
     st.Page("pages/Home.py", title="Overview", default=True),
