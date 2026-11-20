@@ -39,13 +39,13 @@ st.markdown("---")
 @st.cache_data
 def load_data():
 
- df = pd.read_csv(
- "data/processed/cleaned_retail.csv"
- )
+    df = pd.read_csv(
+        "data/processed/cleaned_retail.csv"
+    )
 
- df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
+    df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
 
- return df
+    return df
 
 df = load_data()
 
@@ -54,13 +54,13 @@ df = load_data()
 # =====================================================
 
 inventory = (
- df.groupby("Description")
- .agg(
- Quantity=("Quantity","sum"),
- Revenue=("TotalPrice","sum"),
- Orders=("InvoiceNo","nunique")
- )
- .reset_index()
+    df.groupby("Description")
+      .agg(
+          Quantity=("Quantity","sum"),
+          Revenue=("TotalPrice","sum"),
+          Orders=("InvoiceNo","nunique")
+      )
+      .reset_index()
 )
 
 # =====================================================
@@ -78,16 +78,16 @@ avg_quantity = inventory["Quantity"].mean()
 c1,c2,c3,c4 = st.columns(4)
 
 with c1:
- st.metric(" Products", total_products)
+    st.metric(" Products", total_products)
 
 with c2:
- st.metric(" Quantity Sold", f"{total_quantity:,}")
+    st.metric(" Quantity Sold", f"{total_quantity:,}")
 
 with c3:
- st.metric(" Revenue", f"₹ {total_revenue:,.0f}")
+    st.metric(" Revenue", f"₹ {total_revenue:,.0f}")
 
 with c4:
- st.metric(" Avg Quantity", f"{avg_quantity:.1f}")
+    st.metric(" Avg Quantity", f"{avg_quantity:.1f}")
 
 st.markdown("---")
 
@@ -98,9 +98,9 @@ st.markdown("---")
 st.subheader("Inventory Dataset")
 
 st.dataframe(
- inventory.head(),
- use_container_width=True,
- hide_index=True
+    inventory.head(),
+    use_container_width=True,
+    hide_index=True
 )
 
 st.markdown("---")
@@ -111,19 +111,19 @@ st.markdown("---")
 st.header(" Top 10 Best Selling Products")
 
 top_products = (
- inventory.sort_values("Revenue", ascending=False)
- .head(10)
+    inventory.sort_values("Revenue", ascending=False)
+             .head(10)
 )
 
 fig_top = px.bar(
- top_products,
- x="Revenue",
- y="Description",
- orientation="h",
- color="Revenue",
- title="Top 10 Products by Revenue",
- text_auto=".2s",
- template="plotly_white"
+    top_products,
+    x="Revenue",
+    y="Description",
+    orientation="h",
+    color="Revenue",
+    title="Top 10 Products by Revenue",
+    text_auto=".2s",
+    template="plotly_white"
 )
 
 fig_top.update_layout(yaxis=dict(categoryorder="total ascending"))
@@ -139,19 +139,19 @@ st.markdown("---")
 st.header(" Lowest Selling Products")
 
 bottom_products = (
- inventory.sort_values("Revenue", ascending=True)
- .head(10)
+    inventory.sort_values("Revenue", ascending=True)
+             .head(10)
 )
 
 fig_bottom = px.bar(
- bottom_products,
- x="Revenue",
- y="Description",
- orientation="h",
- color="Revenue",
- title="Lowest Selling Products",
- text_auto=".2s",
- template="plotly_white"
+    bottom_products,
+    x="Revenue",
+    y="Description",
+    orientation="h",
+    color="Revenue",
+    title="Lowest Selling Products",
+    text_auto=".2s",
+    template="plotly_white"
 )
 
 fig_bottom.update_layout(yaxis=dict(categoryorder="total ascending"))
@@ -167,16 +167,16 @@ st.markdown("---")
 st.header(" Revenue Contribution")
 
 top15 = (
- inventory.sort_values("Revenue", ascending=False)
- .head(15)
+    inventory.sort_values("Revenue", ascending=False)
+             .head(15)
 )
 
 fig_pie = px.pie(
- top15,
- names="Description",
- values="Revenue",
- hole=0.45,
- title="Top 15 Products Revenue Share"
+    top15,
+    names="Description",
+    values="Revenue",
+    hole=0.45,
+    title="Top 15 Products Revenue Share"
 )
 
 fig_pie.update_traces(textposition="inside")
@@ -192,11 +192,11 @@ st.markdown("---")
 st.header(" Product Quantity Distribution")
 
 fig_hist = px.histogram(
- inventory,
- x="Quantity",
- nbins=40,
- title="Distribution of Product Quantity Sold",
- template="plotly_white"
+    inventory,
+    x="Quantity",
+    nbins=40,
+    title="Distribution of Product Quantity Sold",
+    template="plotly_white"
 )
 
 st.plotly_chart(fig_hist, use_container_width=True)
@@ -210,9 +210,9 @@ st.markdown("---")
 st.header(" Top Products")
 
 st.dataframe(
- top_products,
- use_container_width=True,
- hide_index=True
+    top_products,
+    use_container_width=True,
+    hide_index=True
 )
 
 st.markdown("---")
@@ -224,55 +224,55 @@ st.markdown("---")
 st.header(" ABC Inventory Classification")
 
 inventory = inventory.sort_values(
- "Revenue",
- ascending=False
+    "Revenue",
+    ascending=False
 )
 
 inventory["RevenuePercent"] = (
- inventory["Revenue"] /
- inventory["Revenue"].sum()
+    inventory["Revenue"] /
+    inventory["Revenue"].sum()
 )
 
 inventory["Cumulative"] = (
- inventory["RevenuePercent"]
- .cumsum()
+    inventory["RevenuePercent"]
+    .cumsum()
 )
 
 def abc_class(value):
- if value <= 0.80:
- return "A"
- elif value <= 0.95:
- return "B"
- else:
- return "C"
+    if value <= 0.80:
+        return "A"
+    elif value <= 0.95:
+        return "B"
+    else:
+        return "C"
 
 inventory["ABC"] = (
- inventory["Cumulative"]
- .apply(abc_class)
+    inventory["Cumulative"]
+    .apply(abc_class)
 )
 
 abc_summary = (
- inventory.groupby("ABC")
- .agg(
- Products=("Description", "count"),
- Revenue=("Revenue", "sum")
- )
- .reset_index()
+    inventory.groupby("ABC")
+             .agg(
+                 Products=("Description", "count"),
+                 Revenue=("Revenue", "sum")
+             )
+             .reset_index()
 )
 
 fig_abc = px.bar(
- abc_summary,
- x="ABC",
- y="Revenue",
- color="ABC",
- text_auto=".2s",
- title="ABC Inventory Analysis",
- template="plotly_white"
+    abc_summary,
+    x="ABC",
+    y="Revenue",
+    color="ABC",
+    text_auto=".2s",
+    title="ABC Inventory Analysis",
+    template="plotly_white"
 )
 
 st.plotly_chart(
- fig_abc,
- use_container_width=True
+    fig_abc,
+    use_container_width=True
 )
 
 st.markdown("---")
@@ -288,8 +288,8 @@ lowest_product = inventory.iloc[-1]
 col1, col2 = st.columns(2)
 
 with col1:
- st.success(f"""
-### Best Performing Product
+    st.success(f"""
+###  Best Performing Product
 
 **{highest_product['Description']}**
 
@@ -299,8 +299,8 @@ Quantity Sold: {highest_product['Quantity']:,}
 """)
 
 with col2:
- st.warning(f"""
-### Lowest Performing Product
+    st.warning(f"""
+###  Lowest Performing Product
 
 **{lowest_product['Description']}**
 
@@ -320,9 +320,9 @@ st.header(" Low Stock / Low Sales Products")
 low_stock = inventory[inventory["Quantity"] < inventory["Quantity"].quantile(0.25)]
 
 st.dataframe(
- low_stock,
- use_container_width=True,
- hide_index=True
+    low_stock,
+    use_container_width=True,
+    hide_index=True
 )
 
 st.markdown("---")
@@ -334,14 +334,14 @@ st.markdown("---")
 st.header(" Reorder Recommendations")
 
 recommend = inventory.sort_values(
- "Revenue",
- ascending=False
+    "Revenue",
+    ascending=False
 ).head(15)
 
 st.dataframe(
- recommend[["Description", "Revenue", "Quantity", "Orders", "ABC"]],
- use_container_width=True,
- hide_index=True
+    recommend[["Description", "Revenue", "Quantity", "Orders", "ABC"]],
+    use_container_width=True,
+    hide_index=True
 )
 
 st.info(
@@ -361,12 +361,12 @@ st.markdown("---")
 st.header(" Inventory Statistics")
 
 stats = inventory[
- ["Quantity", "Revenue", "Orders"]
+    ["Quantity", "Revenue", "Orders"]
 ].describe().round(2)
 
 st.dataframe(
- stats,
- use_container_width=True
+    stats,
+    use_container_width=True
 )
 
 st.markdown("---")
@@ -380,10 +380,10 @@ st.header(" Download Inventory Report")
 csv = inventory.to_csv(index=False).encode("utf-8")
 
 st.download_button(
- label=" Download Inventory Report",
- data=csv,
- file_name="inventory_report.csv",
- mime="text/csv"
+    label=" Download Inventory Report",
+    data=csv,
+    file_name="inventory_report.csv",
+    mime="text/csv"
 )
 
 st.markdown("---")
@@ -412,17 +412,17 @@ st.markdown("---")
 st.header(" Business Recommendations")
 
 recommendations = [
- " Prioritize Category A products for inventory planning.",
- " Monitor Category B products regularly to prevent stock shortages.",
- " Reduce excess inventory of Category C products.",
- " Automate reorder points for high-demand products.",
- " Review inventory trends every month.",
- " Integrate demand forecasting with inventory planning.",
- " Focus promotional campaigns on slow-moving products."
+    " Prioritize Category A products for inventory planning.",
+    " Monitor Category B products regularly to prevent stock shortages.",
+    " Reduce excess inventory of Category C products.",
+    " Automate reorder points for high-demand products.",
+    " Review inventory trends every month.",
+    " Integrate demand forecasting with inventory planning.",
+    " Focus promotional campaigns on slow-moving products."
 ]
 
 for rec in recommendations:
- st.success(rec)
+    st.success(rec)
 
 st.markdown("---")
 
@@ -437,12 +437,12 @@ This dashboard helps businesses optimize inventory using sales analytics.
 
 ### Features
 
-- Product Performance Analysis
-- ABC Inventory Classification
-- Low Performing Product Detection
-- Revenue Contribution Analysis
-- Reorder Recommendations
-- AI Business Insights
+-  Product Performance Analysis
+-  ABC Inventory Classification
+-  Low Performing Product Detection
+-  Revenue Contribution Analysis
+-  Reorder Recommendations
+-  AI Business Insights
 
 ### Benefits
 
@@ -464,9 +464,9 @@ st.markdown(
 
 <div style='text-align:center;'>
 
-### Inventory Optimization Dashboard
+###  Inventory Optimization Dashboard
 
-Built with using Streamlit, Plotly & Pandas
+Built with  using Streamlit, Plotly & Pandas
 
  2026 RetailPulse
 
