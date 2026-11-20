@@ -7,12 +7,6 @@ import plotly.graph_objects as go
 # PAGE CONFIG
 # --------------------------------------------------
 
-st.set_page_config(
-    page_title="Demand Forecasting",
-    page_icon="📈",
-    layout="wide"
-)
-
 # --------------------------------------------------
 # HIDE STREAMLIT DEFAULT MENU
 # --------------------------------------------------
@@ -21,7 +15,7 @@ hide_menu = """
 <style>
 #MainMenu {visibility:hidden;}
 footer {visibility:hidden;}
-header {visibility:hidden;}
+
 </style>
 """
 
@@ -33,7 +27,7 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 
 st.markdown("""
 <h1 style='text-align:center;color:#2563EB;'>
-📈 Demand Forecasting
+ Demand Forecasting
 </h1>
 
 <h3 style='text-align:center;color:gray;'>
@@ -76,25 +70,25 @@ c1, c2, c3, c4 = st.columns(4)
 
 with c1:
     st.metric(
-        "📅 Forecast Days",
+        " Forecast Days",
         future_days
     )
 
 with c2:
     st.metric(
-        "💰 Expected Revenue",
+        " Expected Revenue",
         f"₹ {forecast_sales:,.0f}"
     )
 
 with c3:
     st.metric(
-        "📈 Peak Forecast",
+        " Peak Forecast",
         f"₹ {max_sales:,.0f}"
     )
 
 with c4:
     st.metric(
-        "📊 Average Daily Sales",
+        " Average Daily Sales",
         f"₹ {avg_sales:,.0f}"
     )
 
@@ -117,7 +111,7 @@ st.markdown("---")
 # FORECAST CHART
 # =====================================================
 
-st.header("📈 Sales Forecast")
+st.header(" Sales Forecast")
 
 fig = go.Figure()
 
@@ -173,7 +167,7 @@ st.markdown("---")
 # NEXT 30 DAYS FORECAST
 # =====================================================
 
-st.header("🔮 Next 30 Days Forecast")
+st.header(" Next 30 Days Forecast")
 
 future = forecast.tail(30)
 
@@ -201,7 +195,7 @@ st.markdown("---")
 # MONTHLY FORECAST
 # =====================================================
 
-st.header("📅 Monthly Forecast")
+st.header(" Monthly Forecast")
 
 monthly = forecast.copy()
 
@@ -233,7 +227,7 @@ st.markdown("---")
 # DAILY SALES DISTRIBUTION
 # =====================================================
 
-st.header("📊 Forecast Distribution")
+st.header(" Forecast Distribution")
 
 fig_hist = px.histogram(
     forecast,
@@ -254,7 +248,7 @@ st.markdown("---")
 # FORECAST TABLE
 # =====================================================
 
-st.header("📄 Forecast Data")
+st.header(" Forecast Data")
 
 st.dataframe(
     forecast,
@@ -267,7 +261,7 @@ st.markdown("---")
 # FORECAST SUMMARY
 # =====================================================
 
-st.header("📊 Forecast Summary")
+st.header(" Forecast Summary")
 
 highest_day = forecast.loc[
     forecast["yhat"].idxmax()
@@ -282,7 +276,7 @@ col1, col2 = st.columns(2)
 with col1:
 
     st.success(f"""
-### 📈 Highest Forecast Day
+###  Highest Forecast Day
 
 **Date:** {highest_day['ds'].date()}
 
@@ -290,7 +284,7 @@ with col1:
 """)
 
     st.success(f"""
-### 💰 Total Forecast Revenue
+###  Total Forecast Revenue
 
 ₹ {forecast['yhat'].sum():,.2f}
 """)
@@ -298,7 +292,7 @@ with col1:
 with col2:
 
     st.warning(f"""
-### 📉 Lowest Forecast Day
+###  Lowest Forecast Day
 
 **Date:** {lowest_day['ds'].date()}
 
@@ -306,7 +300,7 @@ with col2:
 """)
 
     st.info(f"""
-### 📊 Average Daily Forecast
+###  Average Daily Forecast
 
 ₹ {forecast['yhat'].mean():,.2f}
 """)
@@ -317,7 +311,7 @@ st.markdown("---")
 # AI BUSINESS INSIGHTS
 # =====================================================
 
-st.header("🤖 AI Forecast Insights")
+st.header(" AI Forecast Insights")
 
 growth = (
     (forecast.iloc[-1]["yhat"] - forecast.iloc[0]["yhat"])
@@ -328,31 +322,31 @@ recommendations = []
 
 if growth > 5:
     recommendations.append(
-        "📈 Sales are expected to grow. Prepare additional inventory."
+        " Sales are expected to grow. Prepare additional inventory."
     )
 elif growth < -5:
     recommendations.append(
-        "📉 Sales may decline. Focus on promotional campaigns."
+        " Sales may decline. Focus on promotional campaigns."
     )
 else:
     recommendations.append(
-        "📊 Sales are expected to remain relatively stable."
+        " Sales are expected to remain relatively stable."
     )
 
 recommendations.append(
-    "📦 Review inventory weekly based on forecasted demand."
+    " Review inventory weekly based on forecasted demand."
 )
 
 recommendations.append(
-    "🚚 Ensure high-demand products remain in stock."
+    " Ensure high-demand products remain in stock."
 )
 
 recommendations.append(
-    "💳 Launch promotional offers during low-demand periods."
+    " Launch promotional offers during low-demand periods."
 )
 
 recommendations.append(
-    "📈 Update the forecasting model monthly with new sales data."
+    " Update the forecasting model monthly with new sales data."
 )
 
 for item in recommendations:
@@ -364,7 +358,7 @@ st.markdown("---")
 # FORECAST STATISTICS
 # =====================================================
 
-st.header("📈 Forecast Statistics")
+st.header(" Forecast Statistics")
 
 st.dataframe(
     forecast[["yhat", "yhat_lower", "yhat_upper"]]
@@ -379,10 +373,10 @@ st.markdown("---")
 # DOWNLOAD FORECAST
 # =====================================================
 
-st.header("📥 Download Forecast Report")
+st.header(" Download Forecast Report")
 
 st.download_button(
-    label="📄 Download Forecast CSV",
+    label=" Download Forecast CSV",
     data=forecast.to_csv(index=False),
     file_name="sales_forecast.csv",
     mime="text/csv"
@@ -394,18 +388,18 @@ st.markdown("---")
 # ABOUT DEMAND FORECASTING
 # =====================================================
 
-st.header("ℹ️ About This Page")
+st.header(" About This Page")
 
 st.write("""
 This dashboard forecasts future retail sales using **Facebook Prophet**, a time-series forecasting model.
 
 ### Features
 
-- 📈 Future Sales Prediction
-- 🔮 Next 30 Days Forecast
-- 📊 Monthly Revenue Forecast
-- 📉 Confidence Interval
-- 🤖 AI Business Insights
+-  Future Sales Prediction
+-  Next 30 Days Forecast
+-  Monthly Revenue Forecast
+-  Confidence Interval
+-  AI Business Insights
 
 ### Benefits
 
@@ -427,11 +421,11 @@ st.markdown(
 
 <div style="text-align:center">
 
-### 📈 Demand Forecasting Dashboard
+###  Demand Forecasting Dashboard
 
-Built with ❤️ using Streamlit, Plotly & Prophet
+Built with  using Streamlit, Plotly & Prophet
 
-© 2026 RetailPulse
+ 2026 RetailPulse
 
 </div>
 

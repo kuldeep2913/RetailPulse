@@ -6,17 +6,11 @@ import plotly.express as px
 # PAGE CONFIG
 # =====================================================
 
-st.set_page_config(
-    page_title="Inventory Optimization",
-    page_icon="📦",
-    layout="wide"
-)
-
 hide_menu = """
 <style>
 #MainMenu {visibility:hidden;}
 footer {visibility:hidden;}
-header {visibility:hidden;}
+
 </style>
 """
 
@@ -28,7 +22,7 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 
 st.markdown("""
 <h1 style='text-align:center;color:#2563EB;'>
-📦 Inventory Optimization
+ Inventory Optimization
 </h1>
 
 <h3 style='text-align:center;color:gray;'>
@@ -84,16 +78,16 @@ avg_quantity = inventory["Quantity"].mean()
 c1,c2,c3,c4 = st.columns(4)
 
 with c1:
-    st.metric("📦 Products", total_products)
+    st.metric(" Products", total_products)
 
 with c2:
-    st.metric("📦 Quantity Sold", f"{total_quantity:,}")
+    st.metric(" Quantity Sold", f"{total_quantity:,}")
 
 with c3:
-    st.metric("💰 Revenue", f"₹ {total_revenue:,.0f}")
+    st.metric(" Revenue", f"₹ {total_revenue:,.0f}")
 
 with c4:
-    st.metric("📊 Avg Quantity", f"{avg_quantity:.1f}")
+    st.metric(" Avg Quantity", f"{avg_quantity:.1f}")
 
 st.markdown("---")
 
@@ -114,7 +108,7 @@ st.markdown("---")
 # TOP 10 SELLING PRODUCTS
 # =====================================================
 
-st.header("🏆 Top 10 Best Selling Products")
+st.header(" Top 10 Best Selling Products")
 
 top_products = (
     inventory.sort_values("Revenue", ascending=False)
@@ -142,7 +136,7 @@ st.markdown("---")
 # BOTTOM 10 PRODUCTS
 # =====================================================
 
-st.header("📉 Lowest Selling Products")
+st.header(" Lowest Selling Products")
 
 bottom_products = (
     inventory.sort_values("Revenue", ascending=True)
@@ -170,7 +164,7 @@ st.markdown("---")
 # REVENUE CONTRIBUTION
 # =====================================================
 
-st.header("🥧 Revenue Contribution")
+st.header(" Revenue Contribution")
 
 top15 = (
     inventory.sort_values("Revenue", ascending=False)
@@ -195,7 +189,7 @@ st.markdown("---")
 # QUANTITY DISTRIBUTION
 # =====================================================
 
-st.header("📦 Product Quantity Distribution")
+st.header(" Product Quantity Distribution")
 
 fig_hist = px.histogram(
     inventory,
@@ -213,7 +207,7 @@ st.markdown("---")
 # TOP PRODUCTS TABLE
 # =====================================================
 
-st.header("📋 Top Products")
+st.header(" Top Products")
 
 st.dataframe(
     top_products,
@@ -227,7 +221,7 @@ st.markdown("---")
 # ABC INVENTORY ANALYSIS
 # =====================================================
 
-st.header("🏆 ABC Inventory Classification")
+st.header(" ABC Inventory Classification")
 
 inventory = inventory.sort_values(
     "Revenue",
@@ -286,7 +280,7 @@ st.markdown("---")
 # AI INVENTORY INSIGHTS
 # =====================================================
 
-st.header("🤖 AI Inventory Insights")
+st.header(" AI Inventory Insights")
 
 highest_product = inventory.iloc[0]
 lowest_product = inventory.iloc[-1]
@@ -295,7 +289,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.success(f"""
-### 🏆 Best Performing Product
+###  Best Performing Product
 
 **{highest_product['Description']}**
 
@@ -306,7 +300,7 @@ Quantity Sold: {highest_product['Quantity']:,}
 
 with col2:
     st.warning(f"""
-### 📉 Lowest Performing Product
+###  Lowest Performing Product
 
 **{lowest_product['Description']}**
 
@@ -321,7 +315,7 @@ st.markdown("---")
 # LOW STOCK ALERTS
 # =====================================================
 
-st.header("⚠️ Low Stock / Low Sales Products")
+st.header(" Low Stock / Low Sales Products")
 
 low_stock = inventory[inventory["Quantity"] < inventory["Quantity"].quantile(0.25)]
 
@@ -337,7 +331,7 @@ st.markdown("---")
 # REORDER RECOMMENDATIONS
 # =====================================================
 
-st.header("📦 Reorder Recommendations")
+st.header(" Reorder Recommendations")
 
 recommend = inventory.sort_values(
     "Revenue",
@@ -364,7 +358,7 @@ st.markdown("---")
 # INVENTORY STATISTICS
 # =====================================================
 
-st.header("📈 Inventory Statistics")
+st.header(" Inventory Statistics")
 
 stats = inventory[
     ["Quantity", "Revenue", "Orders"]
@@ -381,12 +375,12 @@ st.markdown("---")
 # DOWNLOAD REPORT
 # =====================================================
 
-st.header("📥 Download Inventory Report")
+st.header(" Download Inventory Report")
 
 csv = inventory.to_csv(index=False).encode("utf-8")
 
 st.download_button(
-    label="📄 Download Inventory Report",
+    label=" Download Inventory Report",
     data=csv,
     file_name="inventory_report.csv",
     mime="text/csv"
@@ -398,16 +392,16 @@ st.markdown("---")
 # EXECUTIVE SUMMARY
 # =====================================================
 
-st.header("📋 Executive Summary")
+st.header(" Executive Summary")
 
 category_a = (inventory["ABC"] == "A").sum()
 category_b = (inventory["ABC"] == "B").sum()
 category_c = (inventory["ABC"] == "C").sum()
 
-st.success(f"📦 Total Products Analysed: {len(inventory):,}")
-st.success(f"🏆 Category A Products: {category_a}")
-st.success(f"📊 Category B Products: {category_b}")
-st.success(f"📉 Category C Products: {category_c}")
+st.success(f" Total Products Analysed: {len(inventory):,}")
+st.success(f" Category A Products: {category_a}")
+st.success(f" Category B Products: {category_b}")
+st.success(f" Category C Products: {category_c}")
 
 st.markdown("---")
 
@@ -415,16 +409,16 @@ st.markdown("---")
 # BUSINESS RECOMMENDATIONS
 # =====================================================
 
-st.header("💡 Business Recommendations")
+st.header(" Business Recommendations")
 
 recommendations = [
-    "✅ Prioritize Category A products for inventory planning.",
-    "📦 Monitor Category B products regularly to prevent stock shortages.",
-    "📉 Reduce excess inventory of Category C products.",
-    "🚚 Automate reorder points for high-demand products.",
-    "📊 Review inventory trends every month.",
-    "🤖 Integrate demand forecasting with inventory planning.",
-    "💰 Focus promotional campaigns on slow-moving products."
+    " Prioritize Category A products for inventory planning.",
+    " Monitor Category B products regularly to prevent stock shortages.",
+    " Reduce excess inventory of Category C products.",
+    " Automate reorder points for high-demand products.",
+    " Review inventory trends every month.",
+    " Integrate demand forecasting with inventory planning.",
+    " Focus promotional campaigns on slow-moving products."
 ]
 
 for rec in recommendations:
@@ -436,19 +430,19 @@ st.markdown("---")
 # ABOUT THIS PAGE
 # =====================================================
 
-st.header("ℹ️ About Inventory Optimization")
+st.header(" About Inventory Optimization")
 
 st.write("""
 This dashboard helps businesses optimize inventory using sales analytics.
 
 ### Features
 
-- 📦 Product Performance Analysis
-- 🏆 ABC Inventory Classification
-- 📉 Low Performing Product Detection
-- 📈 Revenue Contribution Analysis
-- ⚠️ Reorder Recommendations
-- 🤖 AI Business Insights
+-  Product Performance Analysis
+-  ABC Inventory Classification
+-  Low Performing Product Detection
+-  Revenue Contribution Analysis
+-  Reorder Recommendations
+-  AI Business Insights
 
 ### Benefits
 
@@ -470,11 +464,11 @@ st.markdown(
 
 <div style='text-align:center;'>
 
-### 📦 Inventory Optimization Dashboard
+###  Inventory Optimization Dashboard
 
-Built with ❤️ using Streamlit, Plotly & Pandas
+Built with  using Streamlit, Plotly & Pandas
 
-© 2026 RetailPulse
+ 2026 RetailPulse
 
 </div>
 """,

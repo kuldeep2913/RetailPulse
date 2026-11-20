@@ -1,73 +1,121 @@
-/* ---------- Hide Streamlit ---------- */
+/* RetailPulse global design system */
 
-#MainMenu{
-    visibility:hidden;
+#MainMenu,
+footer {
+    visibility: hidden;
 }
 
-footer{
-    visibility:hidden;
+.block-container {
+    max-width: 1440px;
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
 }
 
-header{
-    visibility:hidden;
+.site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.45rem 0 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #e8edf5;
 }
 
-/* ---------- Main App ---------- */
-
-.block-container{
-    padding-top:2rem;
-    padding-bottom:2rem;
+.site-brand-mark {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #173b75, #3478d4);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
 }
 
-/* ---------- KPI Cards ---------- */
-
-[data-testid="metric-container"]{
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:20px;
-
-    box-shadow:0px 8px 20px rgba(0,0,0,.08);
-
-    border:1px solid #ECECEC;
-
-    transition:.3s;
+.site-brand-name {
+    color: #14233d;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.2;
 }
 
-[data-testid="metric-container"]:hover{
-
-    transform:translateY(-6px);
-
-    box-shadow:0px 15px 30px rgba(37,99,235,.25);
-
+.site-brand-tagline {
+    color: #718096;
+    font-size: 0.78rem;
+    margin-top: 0.18rem;
 }
 
-/* ---------- Charts ---------- */
-
-.stPlotlyChart{
-
-    background:white;
-
-    padding:15px;
-
-    border-radius:20px;
-
-    box-shadow:0px 8px 20px rgba(0,0,0,.08);
-
+div[data-testid="stMainBlockContainer"] {
+    padding-top: 1.25rem;
 }
 
-/* ---------- Sidebar ---------- */
-
-section[data-testid="stSidebar"]{
-
-    background:#F8FAFC;
-
+div[data-testid="stMetric"] {
+    background: #ffffff;
+    border: 1px solid #e8edf5;
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 5px 18px rgba(20, 35, 61, 0.045);
+    transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
-section[data-testid="stSidebar"] h1{
+div[data-testid="stMetric"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(20, 35, 61, 0.09);
+}
 
-    color:#2563EB;
+.stPlotlyChart {
+    background: #ffffff;
+    border: 1px solid #e8edf5;
+    border-radius: 16px;
+    padding: 0.6rem;
+    box-shadow: 0 5px 18px rgba(20, 35, 61, 0.04);
+}
 
+section[data-testid="stSidebar"] {
+    background: #f7f9fc;
+    border-right: 1px solid #e8edf5;
+}
+
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2 {
+    color: #173b75;
+}
+
+.team-card {
+    min-height: 160px;
+    padding: 1.35rem;
+    border: 1px solid #e5ebf4;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #ffffff, #f7faff);
+    box-shadow: 0 6px 20px rgba(20, 35, 61, 0.05);
+}
+
+.team-card h3 {
+    margin: 0.45rem 0;
+    color: #173b75;
+}
+
+.team-card p {
+    color: #66758b;
+    margin: 0.25rem 0;
+}
+
+.team-role {
+    color: #3478d4;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+    .site-brand {
+        padding-bottom: 0.75rem;
+    }
+    .block-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }

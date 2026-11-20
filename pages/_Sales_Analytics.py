@@ -6,12 +6,6 @@ import plotly.express as px
 # PAGE CONFIGURATION
 # =====================================================
 
-st.set_page_config(
-    page_title="Sales Analytics",
-    page_icon="📊",
-    layout="wide"
-)
-
 # =====================================================
 # CUSTOM CSS
 # =====================================================
@@ -21,7 +15,7 @@ st.markdown("""
 
 #MainMenu {visibility:hidden;}
 footer {visibility:hidden;}
-header {visibility:hidden;}
+
 
 .block-container{
     padding-top:1rem;
@@ -58,7 +52,7 @@ df = load_data()
 # PAGE TITLE
 # =====================================================
 
-st.title("📊 Sales Analytics")
+st.title(" Sales Analytics")
 
 st.write(
 """
@@ -78,7 +72,7 @@ st.sidebar.header("Sales Filters")
 countries = sorted(df["Country"].unique())
 
 selected_country = st.sidebar.multiselect(
-    "🌍 Country",
+    " Country",
     countries,
     default=countries
 )
@@ -89,7 +83,7 @@ min_date = df["InvoiceDate"].min().date()
 max_date = df["InvoiceDate"].max().date()
 
 date_range = st.sidebar.date_input(
-    "📅 Date Range",
+    " Date Range",
     value=(min_date, max_date)
 )
 
@@ -119,28 +113,28 @@ c1,c2,c3,c4 = st.columns(4)
 with c1:
 
     st.metric(
-        "💰 Total Sales",
+        " Total Sales",
         f"₹ {total_sales:,.0f}"
     )
 
 with c2:
 
     st.metric(
-        "🛒 Orders",
+        " Orders",
         f"{total_orders:,}"
     )
 
 with c3:
 
     st.metric(
-        "👥 Customers",
+        " Customers",
         f"{total_customers:,}"
     )
 
 with c4:
 
     st.metric(
-        "📦 Avg Order",
+        " Avg Order",
         f"₹ {average_order:.2f}"
     )
 
@@ -159,7 +153,7 @@ fig_daily = px.line(
     daily_sales,
     x="InvoiceDate",
     y="TotalPrice",
-    title="📈 Daily Sales Trend",
+    title=" Daily Sales Trend",
     markers=True,
     template="plotly_white"
 )
@@ -180,7 +174,7 @@ fig_month = px.bar(
     monthly_sales,
     x="InvoiceDate",
     y="TotalPrice",
-    title="📅 Monthly Revenue",
+    title=" Monthly Revenue",
     text_auto=".2s",
     template="plotly_white"
 )
@@ -202,7 +196,7 @@ fig_country = px.bar(
     x="TotalPrice",
     y="Country",
     orientation="h",
-    title="🌍 Top 10 Countries",
+    title=" Top 10 Countries",
     text_auto=".2s",
     template="plotly_white"
 )
@@ -224,7 +218,7 @@ fig_products = px.bar(
     x="TotalPrice",
     y="Description",
     orientation="h",
-    title="🛍 Top 10 Products",
+    title=" Top 10 Products",
     text_auto=".2s",
     template="plotly_white"
 )
@@ -245,7 +239,7 @@ fig_customers = px.bar(
     top_customers,
     x="CustomerID",
     y="TotalPrice",
-    title="👑 Top Customers",
+    title=" Top Customers",
     text_auto=".2s",
     template="plotly_white"
 )
@@ -258,7 +252,7 @@ fig_distribution = px.histogram(
     df,
     x="TotalPrice",
     nbins=50,
-    title="📦 Sales Distribution",
+    title=" Sales Distribution",
     template="plotly_white"
 )
 
@@ -296,7 +290,7 @@ fig_weekday = px.bar(
     weekday_sales,
     x="Weekday",
     y="TotalPrice",
-    title="📅 Revenue by Weekday",
+    title=" Revenue by Weekday",
     text_auto=".2s",
     template="plotly_white"
 )
@@ -336,7 +330,7 @@ st.markdown("---")
 # EXECUTIVE SUMMARY
 # =====================================================
 
-st.header("📊 Executive Summary")
+st.header(" Executive Summary")
 
 best_country = country_sales.iloc[0]["Country"]
 best_product = top_products.iloc[0]["Description"]
@@ -360,19 +354,19 @@ col1, col2 = st.columns(2)
 with col1:
 
     st.success(f"""
-### 🌍 Best Performing Country
+###  Best Performing Country
 
 **{best_country}**
 """)
 
     st.success(f"""
-### 🛍 Best Selling Product
+###  Best Selling Product
 
 **{best_product}**
 """)
 
     st.success(f"""
-### 💰 Total Revenue
+###  Total Revenue
 
 ₹ **{total_sales:,.2f}**
 """)
@@ -380,7 +374,7 @@ with col1:
 with col2:
 
     st.info(f"""
-### 📈 Highest Sales Day
+###  Highest Sales Day
 
 **{highest_sales_day}**
 
@@ -388,7 +382,7 @@ Revenue : ₹ **{highest_sales_amount:,.2f}**
 """)
 
     st.warning(f"""
-### 📉 Lowest Sales Day
+###  Lowest Sales Day
 
 **{lowest_sales_day}**
 
@@ -401,35 +395,35 @@ st.markdown("---")
 # AI BUSINESS RECOMMENDATIONS
 # =====================================================
 
-st.header("🤖 AI Business Recommendations")
+st.header(" AI Business Recommendations")
 
 recommendations = []
 
 if total_sales > 8000000:
     recommendations.append(
-        "✅ Revenue is strong. Continue investing in top-selling products."
+        " Revenue is strong. Continue investing in top-selling products."
     )
 
 if average_order < 500:
     recommendations.append(
-        "📦 Increase Average Order Value using product bundles."
+        " Increase Average Order Value using product bundles."
     )
 
 if total_customers < 5000:
     recommendations.append(
-        "📢 Launch marketing campaigns to acquire more customers."
+        " Launch marketing campaigns to acquire more customers."
     )
 
 recommendations.append(
-    f"🌍 Expand marketing in **{best_country}**, your strongest market."
+    f" Expand marketing in **{best_country}**, your strongest market."
 )
 
 recommendations.append(
-    f"⭐ Maintain sufficient inventory for **{best_product}**."
+    f" Maintain sufficient inventory for **{best_product}**."
 )
 
 recommendations.append(
-    "📈 Use demand forecasting to improve inventory planning."
+    " Use demand forecasting to improve inventory planning."
 )
 
 for rec in recommendations:
@@ -441,7 +435,7 @@ st.markdown("---")
 # TOP PRODUCTS TABLE
 # =====================================================
 
-st.header("🏆 Top 10 Best Selling Products")
+st.header(" Top 10 Best Selling Products")
 
 st.dataframe(
     top_products,
@@ -455,7 +449,7 @@ st.markdown("---")
 # TOP CUSTOMERS TABLE
 # =====================================================
 
-st.header("👑 Top 10 Customers")
+st.header(" Top 10 Customers")
 
 st.dataframe(
     top_customers,
@@ -469,7 +463,7 @@ st.markdown("---")
 # DATA PREVIEW
 # =====================================================
 
-st.header("📄 Retail Dataset Preview")
+st.header(" Retail Dataset Preview")
 
 st.dataframe(
     df.head(20),
@@ -482,7 +476,7 @@ st.markdown("---")
 # DATASET SUMMARY
 # =====================================================
 
-st.header("📈 Statistical Summary")
+st.header(" Statistical Summary")
 
 st.dataframe(
     df.describe(),
@@ -495,14 +489,14 @@ st.markdown("---")
 # DOWNLOAD REPORTS
 # =====================================================
 
-st.header("📥 Download Reports")
+st.header(" Download Reports")
 
 download_col1, download_col2 = st.columns(2)
 
 with download_col1:
 
     st.download_button(
-        label="📄 Download Clean Dataset",
+        label=" Download Clean Dataset",
         data=df.to_csv(index=False),
         file_name="cleaned_retail.csv",
         mime="text/csv"
@@ -517,7 +511,7 @@ with download_col2:
         )
 
         st.download_button(
-            label="📈 Download Sales Forecast",
+            label=" Download Sales Forecast",
             data=forecast.to_csv(index=False),
             file_name="sales_forecast.csv",
             mime="text/csv"
@@ -533,7 +527,7 @@ st.markdown("---")
 # PROJECT INFORMATION
 # =====================================================
 
-st.header("ℹ️ About RetailPulse")
+st.header(" About RetailPulse")
 
 st.write("""
 
@@ -573,18 +567,18 @@ st.markdown(
 
 <div style='text-align:center;'>
 
-<h4>📊 RetailPulse</h4>
+<h4> RetailPulse</h4>
 
 <p>
 AI-Powered Retail Analytics Platform
 </p>
 
 <p>
-Built using ❤️ Streamlit • Plotly • Python
+Built using  Streamlit • Plotly • Python
 </p>
 
 <p>
-© 2026 Kuldeep Yadav
+ 2026 Kuldeep Yadav
 </p>
 
 </div>

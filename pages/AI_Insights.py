@@ -6,17 +6,11 @@ import plotly.express as px
 # PAGE CONFIG
 # =====================================================
 
-st.set_page_config(
-    page_title="AI Business Insights",
-    page_icon="🤖",
-    layout="wide"
-)
-
 hide_menu = """
 <style>
 #MainMenu {visibility:hidden;}
 footer {visibility:hidden;}
-header {visibility:hidden;}
+
 </style>
 """
 
@@ -28,7 +22,7 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 
 st.markdown("""
 <h1 style='text-align:center;color:#2563EB;'>
-🤖 AI Business Insights
+ AI Business Insights
 </h1>
 
 <h3 style='text-align:center;color:gray;'>
@@ -70,19 +64,19 @@ avg_order = total_sales / orders
 col1,col2,col3,col4,col5 = st.columns(5)
 
 with col1:
-    st.metric("💰 Revenue",f"₹ {total_sales:,.0f}")
+    st.metric(" Revenue",f"₹ {total_sales:,.0f}")
 
 with col2:
-    st.metric("🛒 Orders",f"{orders:,}")
+    st.metric(" Orders",f"{orders:,}")
 
 with col3:
-    st.metric("👥 Customers",f"{customers:,}")
+    st.metric(" Customers",f"{customers:,}")
 
 with col4:
-    st.metric("📦 Products",products)
+    st.metric(" Products",products)
 
 with col5:
-    st.metric("📈 Avg Order",f"₹ {avg_order:.2f}")
+    st.metric(" Avg Order",f"₹ {avg_order:.2f}")
 
 st.markdown("---")
 
@@ -119,7 +113,7 @@ st.markdown("---")
 # AI EXECUTIVE SUMMARY
 # =====================================================
 
-st.header("🤖 AI Executive Summary")
+st.header(" AI Executive Summary")
 
 best_country = (
     df.groupby("Country")["TotalPrice"]
@@ -148,19 +142,19 @@ left, right = st.columns(2)
 with left:
 
     st.success(f"""
-### 🌍 Best Performing Country
+###  Best Performing Country
 
 **{best_country}**
 """)
 
     st.success(f"""
-### 🛍️ Best Selling Product
+###  Best Selling Product
 
 **{best_product}**
 """)
 
     st.success(f"""
-### 👑 Highest Spending Customer
+###  Highest Spending Customer
 
 **Customer ID:** {int(best_customer)}
 """)
@@ -168,19 +162,19 @@ with left:
 with right:
 
     st.info(f"""
-### 💰 Total Revenue
+###  Total Revenue
 
 ₹ {total_sales:,.2f}
 """)
 
     st.info(f"""
-### 📈 Highest Order Value
+###  Highest Order Value
 
 ₹ {highest_sale:,.2f}
 """)
 
     st.info(f"""
-### 📉 Lowest Order Value
+###  Lowest Order Value
 
 ₹ {lowest_sale:,.2f}
 """)
@@ -191,7 +185,7 @@ st.markdown("---")
 # TOP 10 PRODUCTS
 # =====================================================
 
-st.header("🏆 Top 10 Products")
+st.header(" Top 10 Products")
 
 top_products = (
     df.groupby("Description")["TotalPrice"]
@@ -224,7 +218,7 @@ st.markdown("---")
 # COUNTRY PERFORMANCE
 # =====================================================
 
-st.header("🌎 Country Performance")
+st.header(" Country Performance")
 
 country_sales = (
     df.groupby("Country")["TotalPrice"]
@@ -252,7 +246,7 @@ st.markdown("---")
 # CUSTOMER DISTRIBUTION
 # =====================================================
 
-st.header("👥 Top Customers")
+st.header(" Top Customers")
 
 top_customers = (
     df.groupby("CustomerID")["TotalPrice"]
@@ -280,7 +274,7 @@ st.markdown("---")
 # SALES DISTRIBUTION
 # =====================================================
 
-st.header("📊 Sales Distribution")
+st.header(" Sales Distribution")
 
 fig_hist = px.histogram(
     df,
@@ -297,17 +291,17 @@ st.markdown("---")
 # AI BUSINESS RECOMMENDATIONS
 # =====================================================
 
-st.header("🤖 AI Business Recommendations")
+st.header(" AI Business Recommendations")
 
 recommendations = [
-    "🌍 Expand marketing efforts in the highest-performing countries to maximize revenue.",
-    "🛍️ Maintain sufficient inventory for the top-selling products to avoid stockouts.",
-    "👑 Reward high-value customers with exclusive loyalty programs and personalized offers.",
-    "📉 Identify low-selling products and consider discounts, bundles, or discontinuation.",
-    "📈 Use demand forecasting to improve inventory planning and reduce excess stock.",
-    "💳 Increase average order value through cross-selling and product recommendations.",
-    "📦 Monitor inventory weekly and automate reorder points for fast-moving products.",
-    "📊 Track monthly KPIs regularly to evaluate business performance."
+    " Expand marketing efforts in the highest-performing countries to maximize revenue.",
+    " Maintain sufficient inventory for the top-selling products to avoid stockouts.",
+    " Reward high-value customers with exclusive loyalty programs and personalized offers.",
+    " Identify low-selling products and consider discounts, bundles, or discontinuation.",
+    " Use demand forecasting to improve inventory planning and reduce excess stock.",
+    " Increase average order value through cross-selling and product recommendations.",
+    " Monitor inventory weekly and automate reorder points for fast-moving products.",
+    " Track monthly KPIs regularly to evaluate business performance."
 ]
 
 for rec in recommendations:
@@ -319,14 +313,14 @@ st.markdown("---")
 # SWOT ANALYSIS
 # =====================================================
 
-st.header("📋 Business SWOT Analysis")
+st.header(" Business SWOT Analysis")
 
 col1, col2 = st.columns(2)
 
 with col1:
 
     st.info("""
-### 💪 Strengths
+###  Strengths
 
 - Strong customer base
 - High revenue from top products
@@ -335,7 +329,7 @@ with col1:
 """)
 
     st.warning("""
-### ⚠️ Weaknesses
+###  Weaknesses
 
 - Few products generate most revenue
 - Some products have very low sales
@@ -345,7 +339,7 @@ with col1:
 with col2:
 
     st.success("""
-### 🚀 Opportunities
+###  Opportunities
 
 - Expand into new markets
 - Introduce customer loyalty programs
@@ -354,7 +348,7 @@ with col2:
 """)
 
     st.error("""
-### ⚡ Threats
+###  Threats
 
 - Demand fluctuations
 - Inventory shortages
@@ -368,7 +362,7 @@ st.markdown("---")
 # EXECUTIVE REPORT
 # =====================================================
 
-st.header("📄 Executive Summary Report")
+st.header(" Executive Summary Report")
 
 summary = pd.DataFrame({
     "Metric": [
@@ -405,12 +399,12 @@ st.markdown("---")
 # DOWNLOAD EXECUTIVE REPORT
 # =====================================================
 
-st.header("📥 Download Executive Report")
+st.header(" Download Executive Report")
 
 csv = summary.to_csv(index=False).encode("utf-8")
 
 st.download_button(
-    label="📄 Download Executive Report",
+    label=" Download Executive Report",
     data=csv,
     file_name="executive_business_report.csv",
     mime="text/csv"
@@ -422,18 +416,18 @@ st.markdown("---")
 # PROJECT OVERVIEW
 # =====================================================
 
-st.header("📘 About RetailPulse")
+st.header(" About RetailPulse")
 
 st.write("""
 **RetailPulse** is an AI-powered Retail Analytics Platform designed to help businesses make data-driven decisions.
 
 ### Key Modules
 
-- 📊 Sales Dashboard
-- 👥 Customer Segmentation (RFM + K-Means)
-- 📈 Demand Forecasting (Prophet)
-- 📦 Inventory Optimization
-- 🤖 AI Business Insights
+-  Sales Dashboard
+-  Customer Segmentation (RFM + K-Means)
+-  Demand Forecasting (Prophet)
+-  Inventory Optimization
+-  AI Business Insights
 
 ### Technologies Used
 
@@ -466,11 +460,11 @@ st.markdown(
 
 <div style="text-align:center; padding:10px">
 
-<h4>🚀 RetailPulse - AI Powered Retail Analytics Platform</h4>
+<h4> RetailPulse - AI Powered Retail Analytics Platform</h4>
 
-Built with ❤️ using Streamlit, Plotly, Pandas, Scikit-Learn & Prophet
+Built with  using Streamlit, Plotly, Pandas, Scikit-Learn & Prophet
 
-© 2026 Kuldeep Yadav | RetailPulse
+ 2026 Kuldeep Yadav | RetailPulse
 
 </div>
 """,

@@ -6,12 +6,6 @@ import plotly.express as px
 # PAGE CONFIGURATION
 # =====================================================
 
-st.set_page_config(
-    page_title="Customer Segmentation",
-    page_icon="👥",
-    layout="wide"
-)
-
 # =====================================================
 # CUSTOM CSS
 # =====================================================
@@ -21,7 +15,7 @@ st.markdown("""
 
 #MainMenu {visibility:hidden;}
 footer {visibility:hidden;}
-header {visibility:hidden;}
+
 
 .block-container{
     padding-top:1rem;
@@ -55,7 +49,7 @@ rfm = load_data()
 # PAGE TITLE
 # =====================================================
 
-st.title("👥 Customer Segmentation")
+st.title(" Customer Segmentation")
 
 st.write("""
 Analyze customer purchasing behavior using **RFM Analysis**
@@ -117,28 +111,28 @@ c1,c2,c3,c4 = st.columns(4)
 with c1:
 
     st.metric(
-        "👥 Customers",
+        " Customers",
         f"{total_customers:,}"
     )
 
 with c2:
 
     st.metric(
-        "📅 Avg Recency",
+        " Avg Recency",
         f"{avg_recency:.1f} Days"
     )
 
 with c3:
 
     st.metric(
-        "🛒 Avg Frequency",
+        " Avg Frequency",
         f"{avg_frequency:.1f}"
     )
 
 with c4:
 
     st.metric(
-        "💰 Avg Monetary",
+        " Avg Monetary",
         f"₹ {avg_monetary:,.0f}"
     )
 
@@ -148,7 +142,7 @@ st.markdown("---")
 # SEGMENT SUMMARY
 # =====================================================
 
-st.subheader("📋 Customer Segment Summary")
+st.subheader(" Customer Segment Summary")
 
 segment_summary = (
     rfm.groupby("CustomerSegment")
@@ -172,7 +166,7 @@ st.markdown("---")
 # SEGMENT DISTRIBUTION
 # =====================================================
 
-st.header("📊 Customer Segment Distribution")
+st.header(" Customer Segment Distribution")
 
 segment_count = (
     rfm["CustomerSegment"]
@@ -369,7 +363,7 @@ st.markdown("---")
 # CLUSTER SUMMARY
 # =====================================================
 
-st.header("📈 Cluster Summary")
+st.header(" Cluster Summary")
 
 cluster_summary = (
     rfm.groupby("Cluster")[["Recency", "Frequency", "Monetary"]]
@@ -389,7 +383,7 @@ st.markdown("---")
 # AI BUSINESS INSIGHTS
 # =====================================================
 
-st.header("🤖 AI Customer Insights")
+st.header(" AI Customer Insights")
 
 best_segment = (
     rfm.groupby("CustomerSegment")["Monetary"]
@@ -414,7 +408,7 @@ col1, col2 = st.columns(2)
 with col1:
 
     st.success(f"""
-### ⭐ Highest Value Segment
+###  Highest Value Segment
 
 **{best_segment}**
 
@@ -422,7 +416,7 @@ Average Spend: ₹ {highest_value:,.2f}
 """)
 
     st.success(f"""
-### 👥 Total Customers
+###  Total Customers
 
 **{total_customers:,}**
 """)
@@ -430,13 +424,13 @@ Average Spend: ₹ {highest_value:,.2f}
 with col2:
 
     st.warning(f"""
-### ⚠️ Lowest Value Segment
+###  Lowest Value Segment
 
 **{lowest_segment}**
 """)
 
     st.info(f"""
-### 💰 Average Customer Value
+###  Average Customer Value
 
 ₹ {avg_monetary:,.2f}
 """)
@@ -447,28 +441,28 @@ st.markdown("---")
 # SEGMENT RECOMMENDATIONS
 # =====================================================
 
-st.header("📋 AI Recommendations")
+st.header(" AI Recommendations")
 
 recommendations = []
 
 recommendations.append(
-    f"🌟 Focus marketing campaigns on **{best_segment}** customers."
+    f" Focus marketing campaigns on **{best_segment}** customers."
 )
 
 recommendations.append(
-    "🎁 Offer loyalty rewards to Regular customers to increase repeat purchases."
+    " Offer loyalty rewards to Regular customers to increase repeat purchases."
 )
 
 recommendations.append(
-    "📢 Re-engage At-Risk customers using personalized email campaigns."
+    " Re-engage At-Risk customers using personalized email campaigns."
 )
 
 recommendations.append(
-    "💳 Provide premium membership benefits for Loyal customers."
+    " Provide premium membership benefits for Loyal customers."
 )
 
 recommendations.append(
-    "📦 Recommend complementary products to increase basket value."
+    " Recommend complementary products to increase basket value."
 )
 
 for rec in recommendations:
@@ -480,7 +474,7 @@ st.markdown("---")
 # TOP CUSTOMERS
 # =====================================================
 
-st.header("🏆 Top 20 Customers")
+st.header(" Top 20 Customers")
 
 top20 = (
     rfm.sort_values("Monetary", ascending=False)
@@ -499,7 +493,7 @@ st.markdown("---")
 # CUSTOMER SEARCH
 # =====================================================
 
-st.header("🔍 Search Customer")
+st.header(" Search Customer")
 
 customer_ids = sorted(rfm["CustomerID"].unique())
 
@@ -524,7 +518,7 @@ st.markdown("---")
 # FULL DATASET
 # =====================================================
 
-st.header("📄 Customer Segmentation Dataset")
+st.header(" Customer Segmentation Dataset")
 
 st.dataframe(
     rfm,
@@ -538,10 +532,10 @@ st.markdown("---")
 # DOWNLOAD REPORT
 # =====================================================
 
-st.header("📥 Download Report")
+st.header(" Download Report")
 
 st.download_button(
-    label="📄 Download Customer Segmentation Report",
+    label=" Download Customer Segmentation Report",
     data=rfm.to_csv(index=False),
     file_name="customer_segmentation.csv",
     mime="text/csv"
@@ -553,7 +547,7 @@ st.markdown("---")
 # RFM STATISTICS
 # =====================================================
 
-st.header("📈 RFM Statistics")
+st.header(" RFM Statistics")
 
 st.dataframe(
     rfm[["Recency","Frequency","Monetary"]].describe().round(2),
@@ -566,7 +560,7 @@ st.markdown("---")
 # ABOUT THIS PAGE
 # =====================================================
 
-st.header("ℹ️ About Customer Segmentation")
+st.header(" About Customer Segmentation")
 
 st.write("""
 
@@ -581,10 +575,10 @@ and **K-Means Clustering**.
 
 ### Customer Segments
 
-- ⭐ Loyal Customers
-- 👥 Regular Customers
-- ⚠️ At-Risk Customers
-- 💎 VIP Customers
+-  Loyal Customers
+-  Regular Customers
+-  At-Risk Customers
+-  VIP Customers
 
 This analysis helps businesses improve marketing campaigns,
 increase customer retention, and maximize revenue.
@@ -603,11 +597,11 @@ st.markdown(
 
 <div style="text-align:center">
 
-### 👥 Customer Segmentation Dashboard
+###  Customer Segmentation Dashboard
 
-Built with ❤️ using Streamlit, Plotly & Scikit-Learn
+Built with  using Streamlit, Plotly & Scikit-Learn
 
-© 2026 RetailPulse
+ 2026 RetailPulse
 
 </div>
 
