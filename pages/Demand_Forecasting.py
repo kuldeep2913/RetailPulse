@@ -15,7 +15,7 @@ hide_menu = """
 <style>
 #MainMenu {visibility:hidden;}
 footer {visibility:hidden;}
-header {visibility:hidden;}
+
 </style>
 """
 
