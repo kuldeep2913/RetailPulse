@@ -3,786 +3,253 @@ import pandas as pd
 import plotly.express as px
 
 # =====================================================
-# PAGE CONFIGURATION
-# =====================================================
-
-# =====================================================
-# LOAD CUSTOM CSS
-# =====================================================
-
-def load_css():
-    try:
-        with open("assets/style.css") as f:
-            st.markdown(
-                f"<style>{f.read()}</style>",
-                unsafe_allow_html=True
-            )
-    except FileNotFoundError:
-        pass
-
-load_css()
-
-# =====================================================
 # LOAD DATA
 # =====================================================
 
 @st.cache_data
 def load_data():
+    data = pd.read_csv("data/processed/cleaned_retail.csv")
+    data["InvoiceDate"] = pd.to_datetime(data["InvoiceDate"], errors="coerce")
+    data = data.dropna(subset=["InvoiceDate", "TotalPrice"])
+    return data
 
-    df = pd.read_csv("data/processed/cleaned_retail.csv")
+try:
+    df = load_data()
+except FileNotFoundError:
+    st.error("The processed retail dataset could not be found. Check data/processed/cleaned_retail.csv.")
+    st.stop()
+except Exception as error:
+    st.error(f"Unable to load the retail dataset: {error}")
+    st.stop()
 
-    df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
-
-    return df
-
-df = load_data()
-
-# =====================================================
-# USE THE COMPLETE DATASET ON THE OVERVIEW PAGE
-# =====================================================
-
-# No country or date filters are applied on this page.
-# Detailed filtering remains available in the relevant analytics modules.
-
-# =====================================================
-# HERO SECTION
-# =====================================================
-
-logo_col, title_col = st.columns([1, 5])
-
-with logo_col:
-
-    st.image("assets/logo.png", width=120)
-
-with title_col:
-
-    st.title(" RetailPulse")
-
-    st.caption("AI-Powered Retail Analytics Platform")
-
-st.image(
-    "assets/banner.png",
-    use_container_width=True
-)
-
-st.divider()
+if df.empty:
+    st.warning("There is no valid transaction data to display.")
+    st.stop()
 
 # =====================================================
-# INTRODUCTION
+# HERO
 # =====================================================
 
-st.header(" Welcome to RetailPulse")
+hero_logo, hero_text = st.columns([1, 5], vertical_alignment="center")
+
+with hero_logo:
+    try:
+        st.image("assets/logo.png", width=115)
+    except Exception:
+        st.markdown("## RP")
+
+with hero_text:
+    st.title("RetailPulse")
+    st.caption("AI-powered retail analytics platform")
+
+try:
+    st.image("assets/banner.png", use_container_width=True)
+except Exception:
+    st.info("Explore your retail performance, customers, products, and sales trends.")
 
 st.write(
-    """
-RetailPulse is an AI-powered Retail Analytics platform that helps businesses
-analyze sales performance, customer behavior, inventory trends, and future demand.
-
-The dashboard transforms raw retail transaction data into meaningful insights
-using Data Analytics and Machine Learning.
-"""
+    "A clear, interactive view of your retail business. Explore the performance "
+    "summary below, then switch between trends and product or country insights."
 )
 
-info1, info2, info3 = st.columns(3)
-
-with info1:
-
-    st.success(" Sales Dashboard")
-
-    st.write("Monitor revenue, orders and sales trends.")
-
-with info2:
-
-    st.success(" Customer Analytics")
-
-    st.write("Analyze customer behaviour and loyalty.")
-
-with info3:
-
-    st.success(" AI Insights")
-
-    st.write("Forecast sales and generate recommendations.")
-
-st.divider()
-
 # =====================================================
-# KPI CALCULATIONS
+# CORE METRICS — EACH SHOWN ONCE
 # =====================================================
 
-total_sales = df["TotalPrice"].sum()
-
+total_revenue = df["TotalPrice"].sum()
 total_orders = df["InvoiceNo"].nunique()
-
 total_customers = df["CustomerID"].nunique()
+average_order_value = total_revenue / total_orders if total_orders else 0
 
-avg_order = (
-    total_sales / total_orders
-    if total_orders > 0 else 0
-)
+st.subheader("Business at a glance")
+metric_cols = st.columns(4)
 
-total_products = df["Description"].nunique()
-
-total_countries = df["Country"].nunique()
-
-# =====================================================
-# KPI SECTION
-# =====================================================
-
-st.header(" Key Performance Indicators")
-
-kpi1, kpi2, kpi3, kpi4 = st.columns(4)
-
-with kpi1:
-    st.metric(
-        " Total Revenue",
-        f"₹ {total_sales:,.0f}"
-    )
-
-with kpi2:
-    st.metric(
-        " Orders",
-        f"{total_orders:,}"
-    )
-
-with kpi3:
-    st.metric(
-        " Customers",
-        f"{total_customers:,}"
-    )
-
-with kpi4:
-    st.metric(
-        " Avg Order",
-        f"₹ {avg_order:,.2f}"
-    )
+metric_cols[0].metric("Total revenue", f"₹{total_revenue:,.0f}")
+metric_cols[1].metric("Orders", f"{total_orders:,}")
+metric_cols[2].metric("Customers", f"{total_customers:,}")
+metric_cols[3].metric("Average order value", f"₹{average_order_value:,.2f}")
 
 st.divider()
 
 # =====================================================
-# BUSINESS OVERVIEW
+# INTERACTIVE EXPLORER
 # =====================================================
 
-st.header(" Business Overview")
+st.subheader("Explore your business")
+overview_tab, product_tab, data_tab = st.tabs(
+    ["Sales trends", "Products and countries", "Data explorer"]
+)
 
-overview1, overview2, overview3 = st.columns(3)
+with overview_tab:
+    controls = st.columns([1, 1])
+    with controls[0]:
+        time_view = st.selectbox(
+            "Time period",
+            ["Monthly", "Daily"],
+            key="overview_time_view"
+        )
+    with controls[1]:
+        chart_view = st.selectbox(
+            "Chart style",
+            ["Line", "Bar"],
+            key="overview_chart_view"
+        )
 
-with overview1:
+    if time_view == "Monthly":
+        trend = (
+            df.assign(Period=df["InvoiceDate"].dt.to_period("M").dt.to_timestamp())
+              .groupby("Period", as_index=False)["TotalPrice"]
+              .sum()
+        )
+        x_title = "Month"
+    else:
+        trend = (
+            df.assign(Period=df["InvoiceDate"].dt.floor("D"))
+              .groupby("Period", as_index=False)["TotalPrice"]
+              .sum()
+        )
+        x_title = "Date"
 
-    st.info(" Countries")
+    if chart_view == "Line":
+        fig = px.line(
+            trend,
+            x="Period",
+            y="TotalPrice",
+            markers=True,
+            title=f"{time_view} revenue trend",
+            labels={"Period": x_title, "TotalPrice": "Revenue"}
+        )
+    else:
+        fig = px.bar(
+            trend,
+            x="Period",
+            y="TotalPrice",
+            title=f"{time_view} revenue",
+            labels={"Period": x_title, "TotalPrice": "Revenue"}
+        )
 
-    st.metric(
-        "Operating Countries",
-        total_countries
+    fig.update_layout(
+        template="plotly_white",
+        hovermode="x unified",
+        margin=dict(l=15, r=15, t=55, b=15)
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    if not trend.empty:
+        best_period = trend.loc[trend["TotalPrice"].idxmax()]
+        st.caption(
+            f"Highest {time_view.lower()} revenue in the selected view: "
+            f"{best_period['Period'].strftime('%d %b %Y')} "
+            f"(₹{best_period['TotalPrice']:,.2f})."
+        )
+
+with product_tab:
+    product_col, country_col = st.columns(2)
+
+    with product_col:
+        st.markdown("#### Top products")
+        product_sales = (
+            df.groupby("Description", dropna=True)["TotalPrice"]
+              .sum()
+              .nlargest(10)
+              .sort_values()
+              .reset_index()
+        )
+        product_fig = px.bar(
+            product_sales,
+            x="TotalPrice",
+            y="Description",
+            orientation="h",
+            title="Top 10 products by revenue",
+            labels={"TotalPrice": "Revenue", "Description": "Product"}
+        )
+        product_fig.update_layout(template="plotly_white", margin=dict(l=10, r=10, t=50, b=10))
+        st.plotly_chart(product_fig, use_container_width=True)
+
+    with country_col:
+        st.markdown("#### Top countries")
+        country_sales = (
+            df.groupby("Country", dropna=True)["TotalPrice"]
+              .sum()
+              .nlargest(10)
+              .sort_values()
+              .reset_index()
+        )
+        country_fig = px.bar(
+            country_sales,
+            x="TotalPrice",
+            y="Country",
+            orientation="h",
+            title="Top 10 countries by revenue",
+            labels={"TotalPrice": "Revenue", "Country": "Country"}
+        )
+        country_fig.update_layout(template="plotly_white", margin=dict(l=10, r=10, t=50, b=10))
+        st.plotly_chart(country_fig, use_container_width=True)
+
+with data_tab:
+    st.markdown("#### Transaction data")
+    st.write("Search and sort the underlying transaction records.")
+    search_text = st.text_input(
+        "Search transactions",
+        placeholder="Enter an invoice, country, product, or customer ID"
     )
 
-with overview2:
-
-    st.info(" Products")
-
-    st.metric(
-        "Unique Products",
-        total_products
-    )
-
-with overview3:
-
-    st.info(" Transactions")
-
-    st.metric(
-        "Total Records",
-        len(df)
-    )
-
-st.divider()
-
-# =====================================================
-# EXECUTIVE SUMMARY
-# =====================================================
-
-st.header(" Executive Summary")
-
-best_country = (
-    df.groupby("Country")["TotalPrice"]
-      .sum()
-      .idxmax()
-)
-
-best_product = (
-    df.groupby("Description")["TotalPrice"]
-      .sum()
-      .idxmax()
-)
-
-highest_day = (
-    df.groupby(df["InvoiceDate"].dt.date)["TotalPrice"]
-      .sum()
-      .idxmax()
-)
-
-highest_sales = (
-    df.groupby(df["InvoiceDate"].dt.date)["TotalPrice"]
-      .sum()
-      .max()
-)
-
-left, right = st.columns(2)
-
-with left:
-
-    st.success(
-        f"""
-###  Best Country
-
-{best_country}
-"""
-    )
-
-    st.success(
-        f"""
-###  Best Product
-
-{best_product}
-"""
-    )
-
-with right:
-
-    st.info(
-        f"""
-###  Highest Sales Day
-
-{highest_day}
-"""
-    )
-
-    st.info(
-        f"""
-###  Highest Daily Revenue
-
-₹ {highest_sales:,.2f}
-"""
-    )
-
-st.divider()
-
-# =====================================================
-# BUSINESS HEALTH
-# =====================================================
-
-st.header(" Business Health")
-
-health1, health2, health3 = st.columns(3)
-
-with health1:
-
-    st.success(" Revenue")
-
-    st.write(
-        "Sales performance is healthy."
-    )
-
-with health2:
-
-    st.success(" Customer Base")
-
-    st.write(
-        f"{total_customers:,} active customers."
-    )
-
-with health3:
-
-    st.success(" Orders")
-
-    st.write(
-        f"{total_orders:,} successful orders."
-    )
-
-st.divider()
-
-# =====================================================
-# PERFORMANCE SCORECARD
-# =====================================================
-
-st.header(" Performance Scorecard")
-
-score1, score2, score3, score4 = st.columns(4)
-
-with score1:
-
-    st.metric(
-        " Countries",
-        total_countries
-    )
-
-with score2:
-
-    st.metric(
-        " Products",
-        total_products
-    )
-
-with score3:
-
-    st.metric(
-        " Customers",
-        total_customers
-    )
-
-with score4:
-
-    st.metric(
-        " Transactions",
-        len(df)
-    )
-
-st.divider()
-
-# =====================================================
-# DAILY SALES TREND
-# =====================================================
-
-st.header(" Sales Analytics")
-
-daily_sales = (
-    df.groupby(df["InvoiceDate"].dt.date)["TotalPrice"]
-      .sum()
-      .reset_index()
-)
-
-fig_daily = px.line(
-    daily_sales,
-    x="InvoiceDate",
-    y="TotalPrice",
-    title="Daily Sales Trend",
-    markers=True
-)
-
-fig_daily.update_layout(
-    xaxis_title="Date",
-    yaxis_title="Revenue",
-    template="plotly_white"
-)
-
-# =====================================================
-# MONTHLY SALES
-# =====================================================
-
-monthly_sales = (
-    df.groupby(df["InvoiceDate"].dt.to_period("M"))["TotalPrice"]
-      .sum()
-      .reset_index()
-)
-
-monthly_sales["InvoiceDate"] = monthly_sales["InvoiceDate"].astype(str)
-
-fig_month = px.bar(
-    monthly_sales,
-    x="InvoiceDate",
-    y="TotalPrice",
-    title="Monthly Revenue",
-    text_auto=".2s"
-)
-
-fig_month.update_layout(
-    template="plotly_white",
-    xaxis_title="Month",
-    yaxis_title="Revenue"
-)
-
-# =====================================================
-# TOP COUNTRIES
-# =====================================================
-
-country_sales = (
-    df.groupby("Country")["TotalPrice"]
-      .sum()
-      .sort_values(ascending=False)
-      .head(10)
-      .reset_index()
-)
-
-fig_country = px.bar(
-    country_sales,
-    x="TotalPrice",
-    y="Country",
-    orientation="h",
-    title="Top 10 Countries"
-)
-
-fig_country.update_layout(template="plotly_white")
-
-# =====================================================
-# TOP PRODUCTS
-# =====================================================
-
-top_products = (
-    df.groupby("Description")["TotalPrice"]
-      .sum()
-      .sort_values(ascending=False)
-      .head(10)
-      .reset_index()
-)
-
-fig_product = px.bar(
-    top_products,
-    x="TotalPrice",
-    y="Description",
-    orientation="h",
-    title="Top 10 Products"
-)
-
-fig_product.update_layout(template="plotly_white")
-
-# =====================================================
-# TOP CUSTOMERS
-# =====================================================
-
-top_customers = (
-    df.groupby("CustomerID")["TotalPrice"]
-      .sum()
-      .sort_values(ascending=False)
-      .head(10)
-      .reset_index()
-)
-
-fig_customer = px.bar(
-    top_customers,
-    x="CustomerID",
-    y="TotalPrice",
-    title="Top 10 Customers"
-)
-
-fig_customer.update_layout(template="plotly_white")
-
-# =====================================================
-# SALES DISTRIBUTION
-# =====================================================
-
-fig_hist = px.histogram(
-    df,
-    x="TotalPrice",
-    nbins=40,
-    title="Sales Distribution"
-)
-
-fig_hist.update_layout(template="plotly_white")
-
-# =====================================================
-# WORLD SALES MAP
-# =====================================================
-
-country_map = (
-    df.groupby("Country")["TotalPrice"]
-      .sum()
-      .reset_index()
-)
-
-fig_map = px.choropleth(
-    country_map,
-    locations="Country",
-    locationmode="country names",
-    color="TotalPrice",
-    hover_name="Country",
-    color_continuous_scale="Blues",
-    title="Global Revenue Distribution"
-)
-
-# =====================================================
-# DASHBOARD LAYOUT
-# =====================================================
-
-row1, row2 = st.columns(2)
-
-with row1:
-    st.plotly_chart(
-        fig_daily,
-        use_container_width=True
-    )
-
-with row2:
-    st.plotly_chart(
-        fig_month,
-        use_container_width=True
-    )
-
-row3, row4 = st.columns(2)
-
-with row3:
-    st.plotly_chart(
-        fig_country,
-        use_container_width=True
-    )
-
-with row4:
-    st.plotly_chart(
-        fig_product,
-        use_container_width=True
-    )
-
-row5, row6 = st.columns(2)
-
-with row5:
-    st.plotly_chart(
-        fig_customer,
-        use_container_width=True
-    )
-
-with row6:
-    st.plotly_chart(
-        fig_hist,
-        use_container_width=True
-    )
-
-st.plotly_chart(
-    fig_map,
-    use_container_width=True
-)
-
-st.divider()
-
-# =====================================================
-# CUSTOMER LEADERBOARD
-# =====================================================
-
-st.header(" Customer Leaderboard")
-
-leaderboard = (
-    df.groupby("CustomerID")
-      .agg(
-          Revenue=("TotalPrice", "sum"),
-          Orders=("InvoiceNo", "nunique")
-      )
-      .sort_values("Revenue", ascending=False)
-      .head(10)
-      .reset_index()
-)
-
-st.dataframe(
-    leaderboard,
-    use_container_width=True,
-    hide_index=True
-)
-
-st.divider()
-
-# =====================================================
-# SALES BY WEEKDAY
-# =====================================================
-
-st.header(" Sales by Weekday")
-
-weekday_sales = (
-    df.groupby(df["InvoiceDate"].dt.day_name())["TotalPrice"]
-      .sum()
-      .reindex([
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-      ])
-      .fillna(0)
-      .reset_index()
-)
-
-weekday_sales.columns = ["Weekday", "Revenue"]
-
-fig_weekday = px.bar(
-    weekday_sales,
-    x="Weekday",
-    y="Revenue",
-    title="Revenue by Weekday",
-    color="Revenue"
-)
-
-fig_weekday.update_layout(template="plotly_white")
-
-st.plotly_chart(
-    fig_weekday,
-    use_container_width=True
-)
-
-st.divider()
-
-# =====================================================
-# AI BUSINESS RECOMMENDATIONS
-# =====================================================
-
-st.header(" AI Business Recommendations")
-
-recommendations = []
-
-if total_sales > 5000000:
-    recommendations.append(
-        " Sales performance is excellent. Continue investing in your best-selling products."
-    )
-
-if avg_order < 500:
-    recommendations.append(
-        " Increase Average Order Value by offering bundles and discounts."
-    )
-
-if total_customers < 5000:
-    recommendations.append(
-        " Acquire more customers using targeted marketing campaigns."
-    )
-
-recommendations.append(
-    f" Focus your marketing efforts in **{best_country}**."
-)
-
-recommendations.append(
-    f" Maintain sufficient inventory for **{best_product}**."
-)
-
-for rec in recommendations:
-    st.success(rec)
-
-st.divider()
-
-# =====================================================
-# DOWNLOAD REPORTS
-# =====================================================
-
-st.header(" Download Reports")
-
-download1, download2 = st.columns(2)
-
-with download1:
+    filtered = df.copy()
+    if search_text.strip():
+        query = search_text.strip().lower()
+        searchable_columns = [
+            column for column in ["InvoiceNo", "Country", "Description", "CustomerID"]
+            if column in filtered.columns
+        ]
+        mask = pd.Series(False, index=filtered.index)
+        for column in searchable_columns:
+            mask = mask | filtered[column].astype(str).str.lower().str.contains(query, na=False)
+        filtered = filtered[mask]
+
+    st.caption(f"Showing {min(len(filtered), 500):,} of {len(filtered):,} matching records.")
+    st.dataframe(filtered.head(500), use_container_width=True, hide_index=True)
 
     st.download_button(
-        label=" Download Clean Dataset",
-        data=df.to_csv(index=False),
-        file_name="cleaned_retail.csv",
+        "Download displayed data (CSV)",
+        data=filtered.to_csv(index=False),
+        file_name="retailpulse_transactions.csv",
         mime="text/csv"
     )
 
-with download2:
-
-    try:
-
-        forecast = pd.read_csv(
-            "data/processed/sales_forecast.csv"
-        )
-
-        st.download_button(
-            label=" Download Forecast",
-            data=forecast.to_csv(index=False),
-            file_name="sales_forecast.csv",
-            mime="text/csv"
-        )
-
-    except:
-
-        st.warning(
-            "Sales forecast file not found."
-        )
-
 st.divider()
 
 # =====================================================
-# DATA PREVIEW
+# TEAM
 # =====================================================
 
-st.header(" Dataset Preview")
-
-st.dataframe(
-    df.head(20),
-    use_container_width=True
-)
-
-st.divider()
-
-# =====================================================
-# STATISTICAL SUMMARY
-# =====================================================
-
-st.header(" Statistical Summary")
-
-st.dataframe(
-    df.describe(include="all"),
-    use_container_width=True
-)
-
-st.divider()
-
-# =====================================================
-# MEET THE TEAM
-# =====================================================
-
-st.header("Meet the Team")
-
+st.subheader("Project team")
 team1, team2 = st.columns(2)
 
 with team1:
-    st.markdown("""
-    <div class="team-card">
-        <div class="team-role">Project Lead</div>
-        <h3>Kuldeep Yadav</h3>
-        <p>B.Tech Computer Science Engineering</p>
-        <p>Shivalik College of Engineering</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="team-card">
+            <div class="team-role">Project Lead</div>
+            <h3>Kuldeep Yadav</h3>
+            <p>B.Tech Computer Science Engineering</p>
+            <p>Shivalik College of Engineering</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 with team2:
-    st.markdown("""
-    <div class="team-card">
-        <div class="team-role">Team Member</div>
-        <h3>Prashant</h3>
-        <p>B.Tech Computer Science Engineering</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="team-card">
+            <div class="team-role">Team Member</div>
+            <h3>Prashant</h3>
+            <p>B.Tech Computer Science Engineering</p>
+            <p>Shivalik College of Engineering</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.divider()
-
-# =====================================================
-# PROJECT FEATURES
-# =====================================================
-
-st.header(" Platform Features")
-
-feature1, feature2, feature3 = st.columns(3)
-
-with feature1:
-
-    st.success(" Sales Analytics")
-
-    st.write(" Daily Sales")
-
-    st.write(" Monthly Revenue")
-
-    st.write(" Country Analysis")
-
-with feature2:
-
-    st.success(" Customer Intelligence")
-
-    st.write(" RFM Analysis")
-
-    st.write(" Customer Segmentation")
-
-    st.write(" Top Customers")
-
-with feature3:
-
-    st.success(" AI & Forecasting")
-
-    st.write(" Demand Forecast")
-
-    st.write(" Business Insights")
-
-    st.write(" Report Generation")
-
-st.divider()
-
-# =====================================================
-# FOOTER
-# =====================================================
-
-st.caption("RetailPulse  2026")
-
-st.caption(
-    "Built with  using Streamlit • Plotly • Pandas • Python"
-)
+st.caption("RetailPulse | Retail intelligence, made actionable")
