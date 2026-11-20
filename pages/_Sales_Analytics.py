@@ -578,7 +578,7 @@ Built using  Streamlit • Plotly • Python
 </p>
 
 <p>
- 2026 Kuldeep Yadav
+ 2026 Kuldeep Yadav & Prashant
 </p>
 
 </div>
