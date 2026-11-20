@@ -721,7 +721,7 @@ with team1:
     <div class="team-card">
         <div class="team-role">Project Lead</div>
         <h3>Kuldeep Yadav</h3>
-        <p>B.Tech Computer Science Engineering (AI)</p>
+        <p>B.Tech Computer Science Engineering</p>
         <p>Shivalik College of Engineering</p>
     </div>
     """, unsafe_allow_html=True)
@@ -731,7 +731,7 @@ with team2:
     <div class="team-card">
         <div class="team-role">Team Member</div>
         <h3>Prashant</h3>
-        <p>B.Tech Computer Science Engineering (AI)</p>
+        <p>B.Tech Computer Science Engineering</p>
     </div>
     """, unsafe_allow_html=True)
 
