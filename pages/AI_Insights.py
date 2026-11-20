@@ -464,7 +464,7 @@ st.markdown(
 
 Built with  using Streamlit, Plotly, Pandas, Scikit-Learn & Prophet
 
- 2026 Kuldeep Yadav | RetailPulse
+ 2026 Kuldeep Yadav & Prashant | RetailPulse
 
 </div>
 """,
