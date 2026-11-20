@@ -30,17 +30,7 @@ if df.empty:
 # HERO
 # =====================================================
 
-hero_logo, hero_text = st.columns([1, 5], vertical_alignment="center")
-
-with hero_logo:
-    try:
-        st.image("assets/logo.png", width=115)
-    except Exception:
-        st.markdown("## RP")
-
-with hero_text:
-    st.title("RetailPulse")
-    st.caption("AI-powered retail analytics platform")
+# The banner already contains the product name and tagline, so avoid repeating them here.
 
 try:
     st.image("assets/banner.png", use_container_width=True)
