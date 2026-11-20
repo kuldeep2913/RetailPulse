@@ -43,13 +43,7 @@ df = load_data()
 
 with st.sidebar:
 
-    st.image("assets/logo.png", width=120)
-
-    st.title("RetailPulse")
-
-    st.caption("AI-Powered Retail Analytics Platform")
-
-    st.markdown("---")
+    st.subheader("Dashboard Filters")
 
     # Country Filter
 
@@ -75,25 +69,7 @@ with st.sidebar:
         max_value=max_date
     )
 
-    st.markdown("---")
 
-    st.info(
-        """
-### Platform Modules
-
- Sales Dashboard
-
- Customer Analytics
-
- Demand Forecasting
-
- Inventory Optimization
-
- AI Insights
-
- Reports
-"""
-    )
 
 # =====================================================
 # APPLY FILTERS
