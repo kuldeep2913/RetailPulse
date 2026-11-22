@@ -1,121 +1,27 @@
-/* RetailPulse global design system */
-
-#MainMenu,
-footer {
-    visibility: hidden;
-}
-
-.block-container {
-    max-width: 1440px;
-    padding-top: 1.5rem;
-    padding-bottom: 3rem;
-}
-
-.site-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    padding: 0.45rem 0 1rem;
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid #e8edf5;
-}
-
-.site-brand-mark {
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    border-radius: 13px;
-    background: linear-gradient(135deg, #173b75, #3478d4);
-    color: #ffffff;
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-}
-
-.site-brand-name {
-    color: #14233d;
-    font-size: 1.3rem;
-    font-weight: 800;
-    letter-spacing: -0.035em;
-    line-height: 1.2;
-}
-
-.site-brand-tagline {
-    color: #718096;
-    font-size: 0.78rem;
-    margin-top: 0.18rem;
-}
-
-div[data-testid="stMainBlockContainer"] {
-    padding-top: 1.25rem;
-}
-
-div[data-testid="stMetric"] {
-    background: #ffffff;
-    border: 1px solid #e8edf5;
-    border-radius: 16px;
-    padding: 1rem 1.1rem;
-    box-shadow: 0 5px 18px rgba(20, 35, 61, 0.045);
-    transition: transform 180ms ease, box-shadow 180ms ease;
-}
-
-div[data-testid="stMetric"]:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgba(20, 35, 61, 0.09);
-}
-
-.stPlotlyChart {
-    background: #ffffff;
-    border: 1px solid #e8edf5;
-    border-radius: 16px;
-    padding: 0.6rem;
-    box-shadow: 0 5px 18px rgba(20, 35, 61, 0.04);
-}
-
-section[data-testid="stSidebar"] {
-    background: #f7f9fc;
-    border-right: 1px solid #e8edf5;
-}
-
-section[data-testid="stSidebar"] h1,
-section[data-testid="stSidebar"] h2 {
-    color: #173b75;
-}
-
-.team-card {
-    min-height: 160px;
-    padding: 1.35rem;
-    border: 1px solid #e5ebf4;
-    border-radius: 16px;
-    background: linear-gradient(145deg, #ffffff, #f7faff);
-    box-shadow: 0 6px 20px rgba(20, 35, 61, 0.05);
-}
-
-.team-card h3 {
-    margin: 0.45rem 0;
-    color: #173b75;
-}
-
-.team-card p {
-    color: #66758b;
-    margin: 0.25rem 0;
-}
-
-.team-role {
-    color: #3478d4;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-@media (max-width: 768px) {
-    .site-brand {
-        padding-bottom: 0.75rem;
-    }
-    .block-container {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root{--rp-canvas:#F4F3EF;--rp-surface:#FFF;--rp-ink:#20232B;--rp-muted:#747987;--rp-lime:#D7F36A;--rp-lavender:#DCD6FF;--rp-dark:#242631;--rp-border:#E8E6E0}
+html,body,[class*="css"]{font-family:'Plus Jakarta Sans',sans-serif}
+.stApp{background:var(--rp-canvas);color:var(--rp-ink)}
+#MainMenu,footer{visibility:hidden}
+.block-container{max-width:1500px;padding-top:1.4rem;padding-bottom:3rem}
+[data-testid="stHeader"]{background:rgba(244,243,239,.92)}
+[data-testid="stNavigation"]{background:transparent;padding:.35rem 0 .85rem}
+[data-testid="stNavigation"]>div{gap:.45rem;flex-wrap:wrap}
+[data-testid="stNavigation"] a{border:1px solid var(--rp-border);border-radius:999px;padding:.55rem 1rem;background:rgba(255,255,255,.8);color:var(--rp-ink);font-weight:650;transition:all .18s ease}
+[data-testid="stNavigation"] a:hover{background:var(--rp-lime);border-color:var(--rp-lime);color:var(--rp-dark)}
+[data-testid="stNavigation"] a[aria-current="page"]{background:var(--rp-dark);border-color:var(--rp-dark);color:#fff}
+h1,h2,h3{color:var(--rp-ink);letter-spacing:-.035em}h1{font-weight:800}h2,h3{font-weight:750}
+p,label,.stCaption{color:var(--rp-muted)}
+[data-testid="stMetric"]{min-height:132px;padding:1.15rem 1.25rem;border-radius:20px;border:1px solid var(--rp-border);background:#fff;box-shadow:0 8px 24px rgba(35,37,44,.045);transition:transform .18s ease,box-shadow .18s ease}
+[data-testid="stMetric"]:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(35,37,44,.09)}
+[data-testid="stMetricLabel"] p{color:var(--rp-muted);font-weight:650}[data-testid="stMetricValue"]{color:var(--rp-ink);font-weight:800}
+.stPlotlyChart,[data-testid="stDataFrame"]{border:1px solid var(--rp-border);border-radius:16px;overflow:hidden;background:#fff}
+.stButton>button,.stDownloadButton>button{border-radius:999px;font-weight:700;border:1px solid var(--rp-border)}
+.stButton>button[kind="primary"]{background:var(--rp-dark);color:#fff;border-color:var(--rp-dark)}
+[data-testid="stTabs"] button{border-radius:999px;font-weight:650}
+[data-testid="stSidebar"]{background:#EEEDE8}
+[data-testid="stAlert"]{border-radius:14px}
+.team-card{min-height:165px;padding:1.35rem;border:1px solid var(--rp-border);border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(35,37,44,.045)}
+.team-card h3{margin:.45rem 0;color:var(--rp-ink)}.team-card p{margin:.25rem 0;color:var(--rp-muted)}
+.team-role{color:#687A35;font-size:.74rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+@media(max-width:768px){.block-container{padding-left:1rem;padding-right:1rem}[data-testid="stNavigation"] a{padding:.45rem .72rem;font-size:.82rem}}
