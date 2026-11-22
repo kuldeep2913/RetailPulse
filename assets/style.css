@@ -65,3 +65,12 @@ hr{border-color:var(--rp-border)}
 @media(max-width:900px){.block-container{padding-top:1rem}.rp-section{margin-top:1.5rem}}
 @media(max-width:640px){.block-container{padding-left:.85rem;padding-right:.85rem}[data-testid="stMetric"]{padding:1rem;min-height:110px}.rp-kpi{padding:1rem}.rp-page-header p{font-size:.88rem}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+
+/* Streamlit's top-level page navigation: consistent pill tabs on every view. */
+[data-testid="stNavigation"]{background:transparent;padding:.35rem 0 1rem}
+[data-testid="stNavigation"]>div{gap:.45rem;flex-wrap:wrap}
+[data-testid="stNavigation"] a{border:1px solid var(--rp-border);border-radius:999px;padding:.55rem .95rem;background:rgba(255,255,255,.82);color:var(--rp-ink);font-weight:700;transition:all .18s ease}
+[data-testid="stNavigation"] a:hover{background:var(--rp-lime);border-color:var(--rp-lime);color:var(--rp-ink)}
+[data-testid="stNavigation"] a[aria-current="page"]{background:var(--rp-ink);border-color:var(--rp-ink);color:#fff}
+@media(max-width:640px){[data-testid="stNavigation"] a{padding:.42rem .68rem;font-size:.78rem}}
