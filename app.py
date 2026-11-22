@@ -10,7 +10,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
-
 apply_theme()
 
 logo_path = ASSETS_DIR / "logo.png"
@@ -25,5 +24,4 @@ pages = [
     st.Page("views/inventory_optimization.py", title="Inventory", icon=":material/inventory_2:", url_path="inventory"),
     st.Page("views/ai_insights.py", title="Business Insights", icon=":material/lightbulb:", url_path="business-insights"),
 ]
-
 st.navigation(pages, position="top").run()
